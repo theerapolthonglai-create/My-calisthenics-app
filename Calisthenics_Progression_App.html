@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calisthenics Master - แพลนออกกำลังกายจาก Level 0 ถึงมืออาชีพ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            violet: '#8b5cf6',
+                            dark: '#0f172a',
+                            card: '#1e293b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Kanit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Phosphor Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+        }
+        .glow-violet {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.35);
+        }
+        .skill-node {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .skill-node:hover {
+            transform: translateY(-3px);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-16 md:pb-0">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-slate-900/80 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center font-bold text-slate-950 text-xl shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid font-black fa-bolt"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight bg-gradient-to-r from-cyan-400 via-emerald-400 to-violet-400 bg-clip-text text-transparent">CALISTHENICS PRO</h1>
+                    <p class="text-xs text-slate-400">จาก Lv.0 สู่ความฟิตขั้นสุด</p>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-1 bg-slate-800/60 p-1.5 rounded-xl border border-slate-700/50">
+                <button onclick="switchTab('roadmap')" id="nav-roadmap" class="nav-btn active px-4 py-1.5 rounded-lg text-sm font-medium transition-all bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 shadow-md">
+                    <i class="fa-solid fa-sitemap mr-1.5"></i> Roadmap
+                </button>
+                <button onclick="switchTab('workout')" id="nav-workout" class="nav-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-dumbbell mr-1.5"></i> ตารางซ้อม
+                </button>
+                <button onclick="switchTab('mobility')" id="nav-mobility" class="nav-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-person-stretching mr-1.5"></i> Mobility & ยืดเหยียด
+                </button>
+                <button onclick="switchTab('library')" id="nav-library" class="nav-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-book-bookmark mr-1.5"></i> คลังท่าซ้อม
+                </button>
+                <button onclick="switchTab('tracker')" id="nav-tracker" class="nav-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-chart-line mr-1.5"></i> บันทึก & สถิติ
+                </button>
+            </nav>
+
+            <button onclick="openAssessmentModal()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium text-cyan-400 transition-all">
+                <i class="fa-solid fa-clipboard-question text-emerald-400"></i>
+                <span>ทดสอบวัดระดับ</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- ================= SECTION 1: ROADMAP & SKILL TREE ================= -->
+        <section id="tab-roadmap" class="tab-content">
+            <!-- Header Level Info -->
+            <div class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-800 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-2">
+                            ระดับปัจจุบันของคุณ
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-bold flex items-center gap-3">
+                            <span id="user-current-level-title">Level 0: Complete Beginner</span>
+                        </h2>
+                        <p class="text-slate-400 text-sm mt-1 max-w-2xl" id="user-level-desc">
+                            เริ่มต้นจากศูนย์ สร้างพื้นฐานข้อต่อ ข้อศอก ไหล่ และแกนกลางลำตัวให้แข็งแรง ไร้อาการบาดเจ็บ
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                        <div class="text-center">
+                            <div class="text-xs text-slate-400">XP ความก้าวหน้า</div>
+                            <div class="text-lg font-bold text-emerald-400" id="user-xp-text">0 / 100 XP</div>
+                        </div>
+                        <div class="w-px h-8 bg-slate-800"></div>
+                        <div class="text-center">
+                            <div class="text-xs text-slate-400">Streak ฝึกซ้อม</div>
+                            <div class="text-lg font-bold text-cyan-400" id="user-streak-count">0 วัน</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level Selector Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+                <button onclick="filterRoadmapLevel(0)" id="lvl-btn-0" class="lvl-select-btn p-3 rounded-xl border border-cyan-500 bg-cyan-500/10 text-cyan-400 font-medium text-sm flex flex-col items-center gap-1 transition-all">
+                    <span class="text-xs opacity-80">เริ่มต้น</span>
+                    <span class="font-bold">Level 0: Beginner</span>
+                </button>
+                <button onclick="filterRoadmapLevel(1)" id="lvl-btn-1" class="lvl-select-btn p-3 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 font-medium text-sm flex flex-col items-center gap-1 transition-all hover:border-slate-700">
+                    <span class="text-xs opacity-80">พื้นฐาน</span>
+                    <span class="font-bold">Level 1: Foundation</span>
+                </button>
+                <button onclick="filterRoadmapLevel(2)" id="lvl-btn-2" class="lvl-select-btn p-3 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 font-medium text-sm flex flex-col items-center gap-1 transition-all hover:border-slate-700">
+                    <span class="text-xs opacity-80">ปานกลาง</span>
+                    <span class="font-bold">Level 2: Intermediate</span>
+                </button>
+                <button onclick="filterRoadmapLevel(3)" id="lvl-btn-3" class="lvl-select-btn p-3 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 font-medium text-sm flex flex-col items-center gap-1 transition-all hover:border-slate-700">
+                    <span class="text-xs opacity-80">ระดับสูง</span>
+                    <span class="font-bold">Level 3: Advanced Skills</span>
+                </button>
+            </div>
+
+            <!-- Skill Progression Cards Container -->
+            <div class="space-y-8" id="roadmap-tree-container">
+                <!-- Dynamically Rendered Progression Trees -->
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: WORKOUT ROUTINE & TIMER ================= -->
+        <section id="tab-workout" class="tab-content hidden">
+            <!-- ... existing workout section ... -->
+        </section>
+
+        <!-- ================= SECTION NEW: MOBILITY & FLEXIBILITY ================= -->
+        <section id="tab-mobility" class="tab-content hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-person-stretching text-emerald-400"></i>
+                    โปรแกรมเพิ่มความยืดหยุ่นและดูแลข้อต่อ (Mobility & Flexibility)
+                </h2>
+                <p class="text-slate-400 text-sm mt-1">เตรียมความพร้อมข้อมือ ไหล่ สะโพก ป้องกันการบาดเจ็บ และเพิ่มขอบเขตการเคลื่อนไหว (Range of Motion)</p>
+            </div>
+
+            <!-- Category Tabs for Mobility -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="filterMobilityCategory('all')" id="mob-cat-all" class="mob-cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                    ทั้งหมด
+                </button>
+                <button onclick="filterMobilityCategory('wrist')" id="mob-cat-wrist" class="mob-cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700">
+                    <i class="fa-solid fa-hand mr-1"></i> ข้อมือ & แขนท่อนล่าง
+                </button>
+                <button onclick="filterMobilityCategory('shoulder')" id="mob-cat-shoulder" class="mob-cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700">
+                    <i class="fa-solid fa-child-reaching mr-1"></i> หัวไหล่ & หลังบน
+                </button>
+                <button onclick="filterMobilityCategory('hip')" id="mob-cat-hip" class="mob-cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700">
+                    <i class="fa-solid fa-person-walking mr-1"></i> สะโพก & ต้นขา
+                </button>
+            </div>
+
+            <!-- Mobility List -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mobility-cards-container">
+                <!-- Dynamically Rendered Mobility Routines -->
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: EXERCISE LIBRARY ================= -->
+        <section id="tab-library" class="tab-content hidden">
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">คลังท่าฝึก Calisthenics</h2>
+                    <p class="text-slate-400 text-sm mt-1">รายละเอียดโฟกัสกล้ามเนื้อ ข้อควรรู้ และการปรับความยากง่ายของทุกท่า</p>
+                </div>
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-2">
+                    <input type="text" id="lib-search" oninput="renderLibrary()" placeholder="ค้นหาชื่อท่าฝึก..." class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                    <select id="lib-filter-cat" onchange="renderLibrary()" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none">
+                        <option value="all">ทุกหมวดหมู่</option>
+                        <option value="Push">Push (แรงดัน)</option>
+                        <option value="Pull">Pull (แรงดึง)</option>
+                        <option value="Legs">Legs (ช่วงขา)</option>
+                        <option value="Core">Core (แกนกลาง)</option>
+                        <option value="Skill">Skills (ทักษะสูง)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Library Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="library-grid">
+                <!-- Dynamically populated library cards -->
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: TRACKER & RECORDS ================= -->
+        <section id="tab-tracker" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Stats Overview Cards -->
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl border border-cyan-500/20">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">ระดับทักษะปัจจุบัน</div>
+                        <div class="text-xl font-bold text-white" id="tracker-current-level">Level 0</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl border border-emerald-500/20">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">ซ้อมสำเร็จแล้วทั้งหมด</div>
+                        <div class="text-xl font-bold text-white" id="tracker-total-workouts">0 ครั้ง</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center text-xl border border-violet-500/20">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">คะแนน XP สะสม</div>
+                        <div class="text-xl font-bold text-white" id="tracker-total-xp">0 XP</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- PR Log Form & Records -->
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-medal text-amber-400"></i>
+                        บันทึกสถิติสูงสุด (Personal Records / PR)
+                    </h3>
+                    
+                    <form onsubmit="savePR(event)" class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">เลือก ท่าออกกำลังกาย</label>
+                            <select id="pr-exercise-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">จำนวนครั้งสูงสุด (Reps)</label>
+                                <input type="number" id="pr-reps" placeholder="เช่น 15" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">เวลาค้างสูงสุด (วินาที)</label>
+                                <input type="number" id="pr-hold" placeholder="เช่น 20" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 font-semibold text-sm transition-all">
+                            + บันทึกสถิติ PR ใหม่
+                        </button>
+                    </form>
+
+                    <!-- PR Records List -->
+                    <div class="space-y-3" id="pr-list-container">
+                        <div class="text-center text-slate-500 py-6 text-sm">ยังไม่มีสถิติ PR บันทึกไว้</div>
+                    </div>
+                </div>
+
+                <!-- Workout History Log -->
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i>
+                        ประวัติการฝึกซ้อมล่าสุด
+                    </h3>
+                    <div class="space-y-3 max-h-[420px] overflow-y-auto pr-1" id="workout-history-container">
+                        <div class="text-center text-slate-500 py-6 text-sm">ยังไม่มีประวัติการซ้อม</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar for Mobile -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-950/90 backdrop-blur-lg border-t border-slate-800 px-2 py-2 z-40 flex justify-around items-center">
+        <button onclick="switchTab('roadmap')" id="mob-nav-roadmap" class="flex flex-col items-center gap-1 text-cyan-400 text-xs">
+            <i class="fa-solid fa-sitemap text-base"></i>
+            <span>Roadmap</span>
+        </button>
+        <button onclick="switchTab('workout')" id="mob-nav-workout" class="flex flex-col items-center gap-1 text-slate-400 text-xs">
+            <i class="fa-solid fa-dumbbell text-base"></i>
+            <span>ตารางซ้อม</span>
+        </button>
+        <button onclick="switchTab('mobility')" id="mob-nav-mobility" class="flex flex-col items-center gap-1 text-slate-400 text-xs">
+            <i class="fa-solid fa-person-stretching text-base"></i>
+            <span>Mobility</span>
+        </button>
+        <button onclick="switchTab('library')" id="mob-nav-library" class="flex flex-col items-center gap-1 text-slate-400 text-xs">
+            <i class="fa-solid fa-book-bookmark text-base"></i>
+            <span>คลังท่า</span>
+        </button>
+        <button onclick="switchTab('tracker')" id="mob-nav-tracker" class="flex flex-col items-center gap-1 text-slate-400 text-xs">
+            <i class="fa-solid fa-chart-line text-base"></i>
+            <span>สถิติ</span>
+        </button>
+    </div>
+
+    <!-- Modal: Assessment Quiz -->
+    <div id="assessment-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="closeAssessmentModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-clipboard-question text-cyan-400"></i>
+                ประเมินระดับความพร้อม Calisthenics
+            </h3>
+            <p class="text-slate-400 text-xs mb-6">ตอบคำถามเพื่อค้นหา Level เริ่มต้นที่เหมาะสมที่สุดสำหรับคุณ</p>
+
+            <form id="assessment-form" onsubmit="calculateLevelAssessment(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">1. คุณทำ Push-up (วิดพื้นปกติลงสุดอกแตะพื้น) ได้กี่ครั้ง?</label>
+                    <select id="quiz-pushups" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200">
+                        <option value="0">ทำไม่ได้เลย / ได้ไม่เกิน 3 ครั้ง</option>
+                        <option value="1">ทำได้ 4 - 10 ครั้ง</option>
+                        <option value="2">ทำได้ 11 - 25 ครั้ง</option>
+                        <option value="3">ทำได้ 25 ครั้งขึ้นไปชิลๆ</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">2. คุณสามารถดึงข้อบาร์เดี่ยว (Pull-up) ได้กี่ครั้ง?</label>
+                    <select id="quiz-pullups" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200">
+                        <option value="0">ยังดึงขึ้นไม่ได้เลย (0 ครั้ง)</option>
+                        <option value="1">ดึงได้ 1 - 4 ครั้ง</option>
+                        <option value="2">ดึงได้ 5 - 12 ครั้ง</option>
+                        <option value="3">ดึงได้มากกว่า 12 ครั้ง หรือดึงโหนแรงเข่าลอยได้</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">3. คุณสามารถเกร็งท่า Plank (แพลงก์) ได้นานเท่าใด?</label>
+                    <select id="quiz-plank" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200">
+                        <option value="0">น้อยกว่า 30 วินาที</option>
+                        <option value="1">30 - 60 วินาที</option>
+                        <option value="2">60 - 90 วินาที</option>
+                        <option value="3">เกิน 90 วินาทีสบายๆ</option>
+                    </select>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 hover:opacity-90 transition-all">
+                        คำนวณระดับที่เหมาะกับฉัน
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Exercise Details -->
+    <div id="exercise-detail-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-xl rounded-2xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeExerciseModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="exercise-modal-body">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript Application Logic -->
+    <script>
+        // MOBILITY DATA STRUCTURE
+        const MOBILITY_DATA = [
+            {
+                id: 'wrist-first-aid',
+                category: 'wrist',
+                name: 'Wrist Prep Routine (หมุนและยืดข้อต่อข้อมือ)',
+                targetArea: 'ข้อมือ / แขนท่อนล่าง (Forearms)',
+                duration: '3-5 นาที',
+                desc: 'จำเป็นอย่างยิ่งก่อนเล่น Handstand, Push-up หรือ Planche เพื่อป้องการเจ็บข้อต่อข้อมือ',
+                instructions: [
+                    'วางฝ่ามือบนพื้นในท่าคุกเข่า วนน้ำหนักวงกลมเข็มนาฬิกา 10 รอบ',
+                    'หมุนปลายนิ้วเข้าหาตัว ค่อยๆ เอนก้นไปข้างหลังเพื่อยืดท้องแขน ค้างไว้ 30 วินาที',
+                    'คว่ำหลังมือลงบนพื้น กำมือและคลายมือช้าๆ 15 ครั้ง'
+                ],
+                videoQuery: 'Calisthenics Wrist Warmup Routine',
+                svgIcon: `<svg class="w-full h-full text-cyan-400" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="50" r="35" stroke-dasharray="6 6"/><path d="M40 50L50 40L60 50M50 40V65" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+            },
+            {
+                id: 'shoulder-dislocates',
+                category: 'shoulder',
+                name: 'Band Shoulder Dislocates (ควงเชือก/ยางยืดเปิดไหล่)',
+                targetArea: 'หัวไหล่ / หน้าอกส่วนบน / สะบัก',
+                duration: '10-15 ครั้ง x 2 เซ็ต',
+                desc: 'ช่วยเพิ่ม Range of Motion ของหัวไหล่ เพิ่มความปลอดภัยเวลาเล่น Dip หรือ Muscle-up',
+                instructions: [
+                    'จับยางยืดหรือเชือกกว้างกว่าไหล่พอสมควร',
+                    'หมุนแขนตรงข้ามศีรษะไปด้านหลังสะโพกโดยไม่พับศอก',
+                    'หมุนกลับมาด้านหน้าช้าๆ ไม่ฝืนถ้ารู้สึกเจ็บ'
+                ],
+                videoQuery: 'Shoulder Dislocates Mobility Routine',
+                svgIcon: `<svg class="w-full h-full text-emerald-400" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="25" r="10"/><path d="M20 50C20 40 30 40 50 40C70 40 80 40 80 50M50 40V80" stroke-linecap="round"/></svg>`
+            },
+            {
+                id: 'thoracic-extension',
+                category: 'shoulder',
+                name: 'Cat-Cow & Thoracic Extension (ยืดกระดูกอกและหลังบน)',
+                targetArea: 'กระดูกสันหลังส่วนอก (Thoracic Spine)',
+                duration: '45 วินาที',
+                desc: 'เปิดหลังส่วนบน แก้ปัญหาหลังค่อมจากการนั่งทำงาน และช่วยท่า Handstand line ให้ตรงงาม',
+                instructions: [
+                    'ตั้งท่าคุกเข่าสี่ขา (All fours)',
+                    'หายใจเข้า แอ่นหลัง โงนศีรษะขึ้น (Cow)',
+                    'หายใจออก โก่งหลัง ดันพื้น ก้มหน้าลง (Cat)'
+                ],
+                videoQuery: 'Thoracic Spine Mobility Calisthenics',
+                svgIcon: `<svg class="w-full h-full text-violet-400" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M20 60Q50 20 80 60" stroke-linecap="round"/><circle cx="50" cy="30" r="8"/></svg>`
+            },
+            {
+                id: 'hip-opener-pigeon',
+                category: 'hip',
+                name: 'Pigeon Pose & Deep Squat Hold (เปิดข้อต่อสะโพก)',
+                targetArea: 'ข้อต่อสะโพก / กล้ามเนื้อก้น / ขาหนีบ',
+                duration: '45-60 วินาที / ข้าง',
+                desc: 'เพิ่มความคล่องตัวของสะโพก ช่วยให้ย่อ Pistol Squat ได้ลึกขึ้น และช่วยท่า Straddle L-sit',
+                instructions: [
+                    'พับขาด้านหน้า 90 องศา เหยียดขาหลังตรง',
+                    'ค่อยๆ กดสะโพกลงหาพื้น คุมลมหายใจเข้าออกช้าๆ',
+                    'ทำสลับซ้าย-ขวา'
+                ],
+                videoQuery: 'Deep Squat Hip Mobility Stretch',
+                svgIcon: `<svg class="w-full h-full text-amber-400" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M30 70L50 40L70 70M50 40V90" stroke-linecap="round"/><circle cx="50" cy="20" r="8"/></svg>`
+            }
+        ];
+
+        // Extend Database with Search Links and Custom Visual Icons
+        CALISTHENICS_DATA.forEach(item => {
+            item.videoQuery = item.videoQuery || `Calisthenics ${item.name} Tutorial`;
+            item.svgVisual = `<div class="w-full h-28 bg-slate-950/80 rounded-xl flex items-center justify-center p-3 border border-slate-800/80 mb-3 overflow-hidden">
+                <div class="flex flex-col items-center justify-center text-center">
+                    <i class="fa-solid ${item.category === 'Push' ? 'fa-hand-fist text-cyan-400' : item.category === 'Pull' ? 'fa-dumbbell text-emerald-400' : item.category === 'Legs' ? 'fa-person-running text-violet-400' : 'fa-bolt text-amber-400'} text-3xl mb-2 opacity-80"></i>
+                    <span class="text-[10px] text-slate-400 tracking-wider uppercase font-semibold">${item.targetMuscles[0]}</span>
+                </div>
+            </div>`;
+        });
+
+        // Initialize Mobility Views
+        function renderMobilityCards(categoryFilter = 'all') {
+            const container = document.getElementById('mobility-cards-container');
+            if (!container) return;
+
+            let items = MOBILITY_DATA;
+            if (categoryFilter !== 'all') {
+                items = items.filter(m => m.category === categoryFilter);
+            }
+
+            let html = '';
+            items.forEach(m => {
+                const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(m.videoQuery)}`;
+                html += `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="w-full h-24 bg-slate-950 rounded-xl flex items-center justify-center p-2 mb-3 border border-slate-800">
+                                <div class="w-16 h-16">${m.svgIcon}</div>
+                            </div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    ${m.targetArea}
+                                </span>
+                                <span class="text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${m.duration}</span>
+                            </div>
+                            <h3 class="text-base font-bold text-white mb-1">${m.name}</h3>
+                            <p class="text-xs text-slate-400 mb-3">${m.desc}</p>
+                            
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 mb-4">
+                                <span class="text-[11px] font-semibold text-slate-300 block mb-1">ขั้นตอนการทำ:</span>
+                                <ul class="list-disc list-inside text-[11px] text-slate-400 space-y-1">
+                                    ${m.instructions.map(i => `<li>${i}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
+                            <button onclick="startQuickRestTimer(45)" class="py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-cyan-400 font-semibold transition-colors flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-stopwatch"></i> ตั้งค้าง 45s
+                            </button>
+                            <a href="${searchUrl}" target="_blank" rel="noopener" class="py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs text-rose-400 font-semibold border border-rose-500/20 transition-colors text-center flex items-center justify-center gap-1">
+                                <i class="fa-brands fa-youtube"></i> ดูคลิปสอน
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterMobilityCategory(cat) {
+            document.querySelectorAll('.mob-cat-btn').forEach(btn => {
+                btn.className = "mob-cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700";
+            });
+            const activeBtn = document.getElementById(`mob-cat-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "mob-cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+            }
+            renderMobilityCards(cat);
+        }
+
+        // Updated Library Card with YouTube Tutorial Buttons
+        const originalRenderLibrary = renderLibrary;
+        renderLibrary = function() {
+            const grid = document.getElementById('library-grid');
+            const search = document.getElementById('lib-search').value.toLowerCase();
+            const cat = document.getElementById('lib-filter-cat').value;
+
+            let filtered = CALISTHENICS_DATA.filter(ex => {
+                const matchSearch = ex.name.toLowerCase().includes(search) || ex.desc.toLowerCase().includes(search);
+                const matchCat = cat === 'all' || ex.category === cat;
+                return matchSearch && matchCat;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12">ไม่พบท่าออกกำลังกายที่ตรงกับการค้นหา</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(ex => {
+                const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(ex.videoQuery)}`;
+                html += `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all flex flex-col justify-between">
+                        <div>
+                            ${ex.svgVisual}
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    Level ${ex.level} • ${ex.category}
+                                </span>
+                                <span class="text-xs text-slate-500">เป้าหมาย: ${ex.repsTarget}</span>
+                            </div>
+                            <h3 class="text-base font-bold text-white mb-2">${ex.name}</h3>
+                            <p class="text-xs text-slate-400 mb-4 line-clamp-2">${ex.desc}</p>
+                            
+                            <div class="space-y-1 mb-4">
+                                <div class="text-[11px] text-slate-400 font-medium">กล้ามเนื้อหลัก:</div>
+                                <div class="flex flex-wrap gap-1">
+                                    ${ex.targetMuscles.map(m => `<span class="text-[10px] bg-slate-950 text-slate-300 px-2 py-0.5 rounded border border-slate-800">${m}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/80">
+                            <button onclick="openExerciseModal('${ex.id}')" class="py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-cyan-400 font-semibold transition-colors">
+                                เทคนิคละเอียด
+                            </button>
+                            <a href="${youtubeUrl}" target="_blank" rel="noopener" class="py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs text-rose-400 font-semibold border border-rose-500/20 text-center flex items-center justify-center gap-1">
+                                <i class="fa-brands fa-youtube"></i> คลิปสอน
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        };
+
+        // Attach Youtube link into Exercise Detail Modal
+        const originalOpenExerciseModal = openExerciseModal;
+        openExerciseModal = function(id) {
+            const ex = CALISTHENICS_DATA.find(item => item.id === id);
+            if (!ex) return;
+
+            const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(ex.videoQuery)}`;
+            const modalBody = document.getElementById('exercise-modal-body');
+            modalBody.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-400 font-bold border border-cyan-500/20">Level ${ex.level}</span>
+                            <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 font-semibold">${ex.category}</span>
+                        </div>
+                        <a href="${youtubeUrl}" target="_blank" rel="noopener" class="text-xs px-3 py-1 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1 font-semibold hover:bg-rose-500/30">
+                            <i class="fa-brands fa-youtube"></i> เปิดดูคลิปสอนบน YouTube
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">${ex.name}</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">${ex.desc}</p>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80">
+                        <h4 class="text-xs font-bold text-cyan-400 mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-bullseye"></i> ข้อควรรู้และฟอร์มที่ถูกต้อง (Form Cues)
+                        </h4>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            ${ex.formCues.map(c => `<li>${c}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80">
+                        <h4 class="text-xs font-bold text-rose-400 mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-triangle-exclamation"></i> ข้อผิดพลาดที่พบบ่อย (Common Mistakes)
+                        </h4>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            ${ex.mistakes.map(m => `<li>${m}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="text-[11px] text-slate-400">ผ่อนความยาก (Scale Down):</div>
+                            <div class="text-xs font-medium text-emerald-400 mt-0.5">${ex.easierAlt}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="text-[11px] text-slate-400">เพิ่มความยาก (Scale Up):</div>
+                            <div class="text-xs font-medium text-violet-400 mt-0.5">${ex.harderAlt}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('exercise-detail-modal').classList.remove('hidden');
+        };
+
+        // Window load hook update
+        const originalOnload = window.onload;
+        window.onload = function() {
+            if (originalOnload) originalOnload();
+            renderMobilityCards('all');
+        };
+    </script>
+</body>
+</html>
